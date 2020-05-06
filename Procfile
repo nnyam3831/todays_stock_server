@@ -1,1 +1,1 @@
-"web: bin/todays_stock_server" 
+web: bin/todays_stock_server
