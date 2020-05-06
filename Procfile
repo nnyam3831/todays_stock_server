@@ -1,1 +1,1 @@
-"web: todaystock" 
+"web: main.go" 
