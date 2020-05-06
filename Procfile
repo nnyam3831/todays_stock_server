@@ -1,1 +1,1 @@
-"web: main.go" 
+"web: bin/todays_stock_server" 

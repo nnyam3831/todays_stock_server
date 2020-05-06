@@ -10,11 +10,11 @@ import (
 func main() {
 	e := echo.New()
 	port := os.Getenv("PORT")
-	e.GET("/", api.Home)
-	e.GET("/golden", api.GetGQ)
-	e.GET("/kos", api.GetKOS)
-	e.GET("/rise", api.GetRise)
-	e.GET("/search", api.GetSearch)
+	e.GET("/", Home)
+	e.GET("/golden", GetGQ)
+	e.GET("/kos", GetKOS)
+	e.GET("/rise", GetRise)
+	e.GET("/search", GetSearch)
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
