@@ -38,6 +38,10 @@ var KOSDAQ Stock
 func Home(c echo.Context) error {
 
 	defer c.Request().Body.Close()
+	gcross = nil
+	rise = nil
+	search = nil
+
 	done1 := make(chan bool)
 	done2 := make(chan bool)
 	done3 := make(chan bool)
@@ -94,14 +98,14 @@ func GetKOS(c echo.Context) error {
 func getGoldenCross(done chan bool) {
 	res, err := http.Get(goldenCross)
 
-	checkErr(err)
-	checkCode(res)
+	CheckErr(err)
+	CheckCode(res)
 
 	defer res.Body.Close()
 
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 
-	checkErr(err)
+	CheckErr(err)
 	box := doc.Find(".box_type_l")
 	box.Find("tr").Each(func(i int, s *goquery.Selection) {
 
@@ -116,10 +120,10 @@ func getGoldenCross(done chan bool) {
 
 		if tit != "" && pr != "" && per != "" && link != "" {
 			newStock := Stock{
-				Title:   cleanString(tit),
-				Link:    cleanString(link),
-				Price:   cleanString(pr),
-				Percent: cleanString(per),
+				Title:   CleanString(tit),
+				Link:    CleanString(link),
+				Price:   CleanString(pr),
+				Percent: CleanString(per),
 			}
 			gcross = append(gcross, newStock)
 		}
@@ -131,14 +135,14 @@ func getRise(done chan bool) {
 
 	res, err := http.Get(riseURL)
 
-	checkErr(err)
-	checkCode(res)
+	CheckErr(err)
+	CheckCode(res)
 
 	defer res.Body.Close()
 
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 
-	checkErr(err)
+	CheckErr(err)
 	box := doc.Find(".box_type_l")
 	box.Find("tr").EachWithBreak(func(i int, s *goquery.Selection) bool {
 
@@ -153,10 +157,10 @@ func getRise(done chan bool) {
 
 		if tit != "" && pr != "" && per != "" && link != "" {
 			newStock := Stock{
-				Title:   cleanString(tit),
-				Link:    cleanString(link),
-				Price:   cleanString(pr),
-				Percent: cleanString(per),
+				Title:   CleanString(tit),
+				Link:    CleanString(link),
+				Price:   CleanString(pr),
+				Percent: CleanString(per),
 			}
 			rise = append(rise, newStock)
 			if len(rise) == 100 {
@@ -171,14 +175,14 @@ func getRise(done chan bool) {
 func getKOS(done chan bool) {
 	res, err := http.Get(baseURL)
 
-	checkErr(err)
-	checkCode(res)
+	CheckErr(err)
+	CheckCode(res)
 
 	defer res.Body.Close()
 
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 
-	checkErr(err)
+	CheckErr(err)
 	kpNow := doc.Find("#KOSPI_now").Text()
 	kpChange := doc.Find("#KOSPI_change").Text()
 	kospiPrice, _ := iconv.ConvertString(string(kpNow), "euc-kr", "utf-8")
@@ -190,25 +194,25 @@ func getKOS(done chan bool) {
 	kosdaqPer, _ := iconv.ConvertString(string(kdChange), "euc-kr", "utf-8")
 
 	KOSPI.Title = "코스피"
-	KOSPI.Price = cleanString(kospiPrice)
-	KOSPI.Percent = cleanString(kospiPer)
+	KOSPI.Price = CleanString(kospiPrice)
+	KOSPI.Percent = CleanString(kospiPer)
 	KOSDAQ.Title = "코스닥"
-	KOSDAQ.Price = cleanString(kosdaqPrice)
-	KOSDAQ.Percent = cleanString(kosdaqPer)
+	KOSDAQ.Price = CleanString(kosdaqPrice)
+	KOSDAQ.Percent = CleanString(kosdaqPer)
 
 	done <- true
 }
 func getLastSearch(done chan bool) {
 	res, err := http.Get(lastSearch)
 
-	checkErr(err)
-	checkCode(res)
+	CheckErr(err)
+	CheckCode(res)
 
 	defer res.Body.Close()
 
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 
-	checkErr(err)
+	CheckErr(err)
 	box := doc.Find(".box_type_l")
 	box.Find("tr").Each(func(i int, s *goquery.Selection) {
 
@@ -223,23 +227,23 @@ func getLastSearch(done chan bool) {
 
 		if tit != "" && pr != "" && per != "" && link != "" {
 			newStock := Stock{
-				Title:   cleanString(tit),
-				Link:    cleanString(link),
-				Price:   cleanString(pr),
-				Percent: cleanString(per),
+				Title:   CleanString(tit),
+				Link:    CleanString(link),
+				Price:   CleanString(pr),
+				Percent: CleanString(per),
 			}
 			search = append(search, newStock)
 		}
 	})
 	done <- true
 }
-func checkErr(err error) {
+func CheckErr(err error) {
 	if err != nil {
 		log.Fatalln(err)
 	}
 }
 
-func checkCode(res *http.Response) {
+func CheckCode(res *http.Response) {
 	if res.StatusCode != 200 {
 		log.Fatalln("Request Failed: ", res.StatusCode)
 	}
@@ -255,6 +259,6 @@ func detectContentCharset(body io.Reader) string {
 	return "utf-8"
 }
 
-func cleanString(str string) string {
+func CleanString(str string) string {
 	return strings.TrimSpace(str)
 }
