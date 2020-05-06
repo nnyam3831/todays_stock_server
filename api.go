@@ -1,4 +1,4 @@
-package api
+package main
 
 import (
 	"bufio"
@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/labstack/echo"
 
-	"github.com/PuerkitoBio/goquery"
 	"github.com/djimenez/iconv-go"
 	"golang.org/x/net/html/charset"
 )

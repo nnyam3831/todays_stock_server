@@ -5,7 +5,6 @@ import (
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"github.com/nnyam3831/todays_stock_server/src/api"
 )
 
 func main() {
