@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/nnyam3831/todays_stock_server/src/api"
@@ -8,6 +10,7 @@ import (
 
 func main() {
 	e := echo.New()
+	port := os.Getenv("PORT")
 	e.GET("/", api.Home)
 	e.GET("/golden", api.GetGQ)
 	e.GET("/kos", api.GetKOS)
@@ -22,5 +25,5 @@ func main() {
 		AllowMethods: []string{echo.GET, echo.HEAD, echo.PUT, echo.PATCH, echo.POST, echo.DELETE},
 	}))
 
-	e.Logger.Fatal(e.Start(":5000"))
+	e.Logger.Fatal(e.Start(":" + port))
 }
