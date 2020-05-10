@@ -14,8 +14,6 @@ Golang 웹 크롤링 + Rest API
 
 ## API
 
-- /
-  initialize
 
 * /golden
   골든 크로스 데이터 파싱
